@@ -24,7 +24,14 @@ let init () =
     (Seq.empty<Speaker>), Cmd.ofMsg Stop
 
 let update msg currentModel =
-    (Seq.empty<Speaker>), Cmd.none
+    match msg with
+    | ShuffleSpeakers ->
+                Fable.Core.JS.console.log("shuffle speakers")
+                (Seq.empty<Speaker>), Cmd.none
+    | AddSpeaker speakerName ->
+                Fable.Core.JS.console.log("add speaker")
+                (currentModel |> Seq.append [{ Name = speakerName }]) , Cmd.none
+    | _ -> (Seq.empty<Speaker>), Cmd.none
 
 let view model dispatch =
     div [] [
