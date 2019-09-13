@@ -16,7 +16,7 @@ type Speaker = { Name: string }
 type Model = { Counter: Counter option }
 
 type Msg =
-    | AddSpeaker
+    | AddSpeaker of string
     | ShuffleSpeakers
     | Stop
 
@@ -27,7 +27,20 @@ let update msg currentModel =
     (Seq.empty<Speaker>), Cmd.none
 
 let view model dispatch =
-    h2 [] [str "Enter Speakers Seperated by a new line"]
+    div [] [
+        h1 [] [ str "SpeekUp speaker shuffler" ]
+        // h2 [] [str "Enter Speakers Seperated by a new line"]
+        // div [] [
+            // input [
+            //     OnChange (fun ev -> ev.Value
+            //                         |> AddSpeaker
+            //                         |> dispatch)
+            // ]
+            // Button.span [
+            //     Button.OnClick (fun _ -> dispatch ShuffleSpeakers)
+            //  ] [str "Shuffle Speakers"]
+        // ]
+    ]
 
 #if DEBUG
 open Elmish.Debug
