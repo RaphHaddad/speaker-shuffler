@@ -1,3 +1,7 @@
+source https://www.nuget.org/api/v2
+
+nuget Expecto
+nuget FSharp.Core
 group Server
     source https://api.nuget.org/v3/index.json
     framework: netcoreapp2.2
@@ -27,9 +31,9 @@ group Build
     framework: netstandard2.0
     storage: none
 
+nuget FAKE
     nuget FSharp.Core
     nuget Fake.Core.ReleaseNotes
     nuget Fake.Core.Target
     nuget Fake.DotNet.Cli
     nuget Fake.IO.FileSystem
-

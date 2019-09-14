@@ -10,11 +10,7 @@ open Thoth.Json
 open EventMessages
 open Views
 
-open Shared
-
-type Speaker = { Name: string }
-
-type Model = { Counter: Counter option }
+open Types
 
 let init () =
     (Seq.empty<Speaker>), Cmd.ofMsg Stop
@@ -25,7 +21,6 @@ let update msg currentModel =
                 Fable.Core.JS.console.log("shuffle speakers")
                 (Seq.empty<Speaker>), Cmd.none
     | AddSpeaker speakerName ->
-                Fable.Core.JS.console.log("add speaker")
                 (currentModel |> Seq.append [{ Name = speakerName }]) , Cmd.none
     | _ -> (Seq.empty<Speaker>), Cmd.none
 
