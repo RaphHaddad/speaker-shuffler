@@ -14,19 +14,23 @@ let shuffle speakers =
 
         let lastIndex = (speakers |> Seq.length) - 1
         let order = [0..lastIndex]
-                    |> Seq.filter (fun i -> not (usedIndexes |> Seq.contains(i)))
+                    |> Seq.filter (fun i ->
+                                        not (usedIndexes
+                                                |> Seq.contains(i)))
                     |> randomNumber
 
         { speaker with Order = order}, order::usedIndexes
 
     let rec shuffleIntoers shuffledSpeakers =
-        let shuffled, _ = (shuffledSpeakers
-                            |> Seq.mapFold randomOrder [])
+        let shuffled = shuffledSpeakers
+                        |> Seq.mapFold randomOrder []
+                        |> fst
+
         let isAnySpeakerIntroingThemselves =
             shuffled
             |> Seq.exists2 (fun introer speaker ->
-                                        (introer.Name = speaker.Name) &&
-                                         introer.Order = speaker.Order) shuffledSpeakers
+                                (introer.Name = speaker.Name) &&
+                                 introer.Order = speaker.Order) shuffledSpeakers
 
         match isAnySpeakerIntroingThemselves with
         | true -> shuffleIntoers shuffledSpeakers
