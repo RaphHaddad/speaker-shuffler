@@ -28,7 +28,7 @@ let shuffle (speakers: seq<Speaker>) =
                                     |> Seq.mapFold shuffleSpeakers [])
 
     let introducers = fst (speakers
-                                    |> Seq.mapFold (shuffleIntroers shuffledSpeakers) [])
+                                    |> Seq.mapFold shuffleSpeakers [])
 
     shuffledSpeakers|> Seq.sortBy (fun s -> s.Order),
     introducers |> Seq.sortBy (fun i -> i.Order)
