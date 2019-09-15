@@ -2,8 +2,8 @@ module Shuffle
 
 open Types
 
-let shuffle (speakers: seq<Speaker>) =
-    let shuffleSpeakers usedIndexes speaker =
+let shuffle speakers =
+    let randomOrder usedIndexes speaker =
         let randomNumber fromThisList =
             let rand = System.Random()
 
@@ -19,11 +19,25 @@ let shuffle (speakers: seq<Speaker>) =
 
         { speaker with Order = order}, order::usedIndexes
 
-    let shuffledSpeakers = fst (speakers
-                                    |> Seq.mapFold shuffleSpeakers [])
+    let rec shuffleIntoers shuffledSpeakers =
+        let shuffled, _ = (shuffledSpeakers
+                            |> Seq.mapFold randomOrder [])
+        let isAnySpeakerIntroingThemselves =
+            shuffled
+            |> Seq.exists2 (fun introer speaker ->
+                                        (introer.Name = speaker.Name) &&
+                                         introer.Order = speaker.Order) shuffledSpeakers
 
-    let introducers = fst (speakers
-                                    |> Seq.mapFold shuffleSpeakers [])
+        match isAnySpeakerIntroingThemselves with
+        | true -> shuffleIntoers shuffledSpeakers
+        | false -> shuffled
 
-    shuffledSpeakers|> Seq.sortBy (fun s -> s.Order),
-    introducers |> Seq.sortBy (fun i -> i.Order)
+    let shuffledSpeakers = speakers
+                            |> Seq.mapFold randomOrder []
+                            |> fst
+                            |> Seq.sortBy (fun s -> s.Order)
+
+    let introducers = shuffleIntoers shuffledSpeakers
+                      |> Seq.sortBy (fun i -> i.Order)
+
+    shuffledSpeakers, introducers
