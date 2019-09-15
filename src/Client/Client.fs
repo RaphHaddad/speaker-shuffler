@@ -19,7 +19,7 @@ let init () =
 let update msg currentModel =
     match msg with
     | ShuffleSpeakers ->
-                let shuffledSpeakers = shuffle currentModel
+                let shuffledSpeakers, _ = shuffle currentModel
                 Fable.Core.JS.console.log(System.String.Join(",", shuffledSpeakers))
                 (shuffledSpeakers), Cmd.none
     | AddSpeakers speakerNames ->

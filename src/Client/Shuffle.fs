@@ -23,5 +23,8 @@ let shuffle (speakers: seq<Speaker>) =
     let speakersWithOrder = fst (speakers
                                     |> Seq.mapFold shuffle [])
 
-    speakersWithOrder
-    |> Seq.sortBy (fun s -> s.Order)
+    let introducers = fst (speakers
+                                    |> Seq.mapFold shuffle [])
+
+    speakersWithOrder|> Seq.sortBy (fun s -> s.Order),
+    introducers |> Seq.sortBy (fun i -> i.Order)
