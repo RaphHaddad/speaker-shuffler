@@ -10,16 +10,28 @@ open Fulma
 
 let initialView model dispatch =
     div [] [
-        h1 [] [ str "SpeekUp speaker shuffler" ]
-        h2 [] [str "Enter Speakers Seperated by a new line"]
-        div [] [
-            input [
+        form [] [
+            h1 [] [ str "SpeekUp speaker shuffler" ]
+            h2 [] [str "Enter Speakers Seperated by a new line"]
+            textarea [
                 OnChange (fun ev -> ev.Value
-                                    |> AddSpeaker
+                                    |> AddSpeakers
                                     |> dispatch)
-            ]
+            ] []
             Button.span [
                 Button.OnClick (fun _ -> dispatch ShuffleSpeakers)
              ] [str "Shuffle Speakers"]
+        ]
+        table [] [
+            thead [] [
+                tr [] [
+                    td [] [
+                        str "Speaker"
+                    ]
+                    td [] [
+                        str "Introducer"
+                    ]
+                ]
+            ]
         ]
     ]

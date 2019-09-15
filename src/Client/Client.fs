@@ -11,6 +11,7 @@ open EventMessages
 open Views
 
 open Types
+open Shuffle
 
 let init () =
     (Seq.empty<Speaker>), Cmd.ofMsg Stop
@@ -18,10 +19,12 @@ let init () =
 let update msg currentModel =
     match msg with
     | ShuffleSpeakers ->
-                Fable.Core.JS.console.log("shuffle speakers")
-                (Seq.empty<Speaker>), Cmd.none
-    | AddSpeaker speakerName ->
-                (currentModel |> Seq.append [{ Name = speakerName; Order = 0 }]) , Cmd.none
+                let shuffledSpeakers = shuffle currentModel
+                Fable.Core.JS.console.log(System.String.Join(",", shuffledSpeakers))
+                (shuffledSpeakers), Cmd.none
+    | AddSpeakers speakerNames ->
+                speakerNames.Split('\n')
+                |> Seq.map (fun n -> { Name = n; Order = 0 }), Cmd.none
     | _ -> (Seq.empty<Speaker>), Cmd.none
 
 #if DEBUG

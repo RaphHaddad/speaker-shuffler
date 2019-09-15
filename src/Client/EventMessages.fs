@@ -1,6 +1,6 @@
 module EventMessages
 
 type Msg =
-    | AddSpeaker of string
+    | AddSpeakers of string
     | ShuffleSpeakers
     | Stop
