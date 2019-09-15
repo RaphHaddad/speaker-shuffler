@@ -21,7 +21,7 @@ let update msg currentModel =
                 Fable.Core.JS.console.log("shuffle speakers")
                 (Seq.empty<Speaker>), Cmd.none
     | AddSpeaker speakerName ->
-                (currentModel |> Seq.append [{ Name = speakerName }]) , Cmd.none
+                (currentModel |> Seq.append [{ Name = speakerName; Order = 0 }]) , Cmd.none
     | _ -> (Seq.empty<Speaker>), Cmd.none
 
 #if DEBUG

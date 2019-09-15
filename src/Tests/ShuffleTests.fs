@@ -13,7 +13,10 @@ let tests =
         | 0 -> true
         | _ -> false
 
-      let people = [{ Name = "Raph" }; { Name = "Dave" }; { Name = "Jane" }]
+      let people = [{ Name = "Raph"; Order = 0 }
+                    { Name = "Dave"; Order = 0 }
+                    { Name = "Jane"; Order = 0 }
+                    { Name = "Alex"; Order = 0 }]
 
       let shuffledPeople = shuffle people
 
@@ -26,4 +29,13 @@ let tests =
                             |> isEqual
 
       Expect.isFalse areEqual "shouldn't be the same order"
+
+    testCase "three people" <| fun _ ->
+        Expect.isTrue false "test not written"
+
+    testCase "two people" <| fun _ ->
+        Expect.isTrue false "test not written"
+
+    testCase "no duplicates" <| fun _ ->
+        Expect.isTrue false "test not written"
   ]
