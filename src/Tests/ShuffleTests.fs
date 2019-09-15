@@ -20,9 +20,7 @@ let ShuffleRules =
               |> Seq.iter2 (fun person introer ->
                                 (Expect.notEqual person.Name introer.Name "a speaker shouldn't introduce themselves")) introducers
 
-              Expect.isTrue true "test finished"
-
-            [0..10000]
+            [0..10000000]
             |> Seq.iter (fun _ -> test)
   ]
 
@@ -53,29 +51,37 @@ let AcceptanceTests =
 
                   Expect.isFalse areEqual "shouldn't be the same order"
 
-            [0..1000000]
+            [0..10000000]
             |> Seq.iter (fun _ -> test)
 
     testCase "order must be unique" <| fun _ ->
-          let isEqual compareWithResult =
-            match compareWithResult with
-            | 0 -> true
-            | _ -> false
+          let test =
+              let isEqual compareWithResult =
+                match compareWithResult with
+                | 0 -> true
+                | _ -> false
 
-          let people = [{ Name = "Raph"; Order = 0 }
-                        { Name = "Dave"; Order = 0 }
-                        { Name = "Jane"; Order = 0 }
-                        { Name = "Alex"; Order = 0 }]
+              let people = [{ Name = "Raph"; Order = 0 }
+                            { Name = "Dave"; Order = 0 }
+                            { Name = "Jane"; Order = 0 }
+                            { Name = "Alex"; Order = 0 }]
 
-          let shuffledPeople, _ = shuffle people
+              let areOrdersUnique shuffledPeople =
+                              shuffledPeople
+                              |> Seq.distinctBy (fun p -> p.Order)
+                              |> Seq.length
+                              |> (fun distinctLength -> distinctLength = people.Length)
 
-          let ordersAreUnique =
-                          shuffledPeople
-                          |> Seq.distinctBy (fun p -> p.Order)
-                          |> Seq.length
-                          |> (fun distinctLength -> distinctLength = people.Length)
+              let shuffledPeople, shuffledIntroer = shuffle people
 
-          Expect.isTrue ordersAreUnique "orders should be unique"
+              let speakerOrderUnique = areOrdersUnique shuffledPeople
+              let introerOrderUnique = areOrdersUnique shuffledIntroer
+
+              Expect.isTrue (speakerOrderUnique) "speaker orders should be unique"
+              Expect.isTrue (introerOrderUnique) "introducer orders should be unique"
+
+          [0..10000000]
+            |> Seq.iter (fun _ -> test)
 
     testCase "three people" <| fun _ ->
         Expect.isTrue false "test not written"
