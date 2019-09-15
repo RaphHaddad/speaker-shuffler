@@ -19,11 +19,6 @@ let shuffle (speakers: seq<Speaker>) =
 
         { speaker with Order = order}, order::usedIndexes
 
-    let shuffleIntroers shuffledSpeakers usedIndexes speaker =
-        let currentSpeakerIndex = shuffledSpeakers |> Seq.findIndex (fun s -> s.Name = speaker.Name)
-        let speaker, usedIndexes = shuffleSpeakers (currentSpeakerIndex::usedIndexes) speaker
-        speaker, (usedIndexes |> Seq.filter (fun i -> i <> currentSpeakerIndex) |> Seq.toList)
-
     let shuffledSpeakers = fst (speakers
                                     |> Seq.mapFold shuffleSpeakers [])
 
