@@ -14,11 +14,31 @@ let ShuffleRules =
                             { Name = "Jane"; Order = 0 }
                             { Name = "Alex"; Order = 0 }]
 
-              let shuffledPeople, introducers = shuffle people
+              let speakers, introducers = shuffle people
 
-              shuffledPeople
-              |> Seq.iter2 (fun person introer ->
-                                (Expect.notEqual person.Name introer.Name "a speaker shouldn't introduce themselves")) introducers
+              speakers
+              |> Seq.iter2 (fun speaker introer ->
+                                (Expect.notEqual speaker.Name introer.Name "a speaker shouldn't introduce themselves")) introducers
+
+            [0..10000000]
+            |> Seq.iter (fun _ -> test)
+
+      testCase "speakers shouldn't introduce after speaking" <| fun _ ->
+            let test =
+                let people = [{ Name = "Raph"; Order = 0 }
+                              { Name = "Dave"; Order = 0 }
+                              { Name = "Jane"; Order = 0 }
+                              { Name = "Alex"; Order = 0 }]
+
+                let speakers, introducers = shuffle people
+
+                speakers
+                |> Seq.iteri2 (fun i _ speaker ->
+                                  let introer = introducers |> Seq.tryItem(i + 1)
+                                  match introer with
+                                  | Some (introer) ->
+                                                Expect.notEqual speaker.Name introer.Name "Shouldn't introduce after speaking"
+                                  | None -> ()) introducers
 
             [0..10000000]
             |> Seq.iter (fun _ -> test)
@@ -39,14 +59,14 @@ let AcceptanceTests =
                                 { Name = "Jane"; Order = 0 }
                                 { Name = "Alex"; Order = 0 }]
 
-                  let shuffledPeople, _ = shuffle people
+                  let speakers, _ = shuffle people
 
                   let areEqual = people
                                         |> Seq.compareWith (fun x y ->
                                                                 if x.Name = y.Name then
                                                                     0
                                                                 else
-                                                                    1 ) shuffledPeople
+                                                                    1 ) speakers
                                         |> isEqual
 
                   Expect.isFalse areEqual "shouldn't be the same order"
@@ -66,15 +86,15 @@ let AcceptanceTests =
                             { Name = "Jane"; Order = 0 }
                             { Name = "Alex"; Order = 0 }]
 
-              let areOrdersUnique shuffledPeople =
-                              shuffledPeople
+              let areOrdersUnique speakers =
+                              speakers
                               |> Seq.distinctBy (fun p -> p.Order)
                               |> Seq.length
                               |> (fun distinctLength -> distinctLength = people.Length)
 
-              let shuffledPeople, shuffledIntroer = shuffle people
+              let speakers, shuffledIntroer = shuffle people
 
-              let speakerOrderUnique = areOrdersUnique shuffledPeople
+              let speakerOrderUnique = areOrdersUnique speakers
               let introerOrderUnique = areOrdersUnique shuffledIntroer
 
               Expect.isTrue (speakerOrderUnique) "speaker orders should be unique"

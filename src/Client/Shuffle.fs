@@ -32,9 +32,23 @@ let shuffle speakers =
                                 (introer.Name = speaker.Name) &&
                                  introer.Order = speaker.Order) shuffledSpeakers
 
-        match isAnySpeakerIntroingThemselves with
-        | true -> shuffleIntoers shuffledSpeakers
-        | false -> shuffled
+        let isSpeakerIntoringAfterSpeach =
+            let isIntroing speaker (introer: option<Speaker>) =
+                match introer with
+                | Some introer -> speaker.Name = introer.Name
+                | None -> false
+
+            let length = shuffled |> Seq.length
+            match length with
+            | l when l <= 3 -> false
+            | _ -> shuffled
+                   |> Seq.mapi2 (fun i speaker _ ->
+                                        isIntroing speaker (shuffled |> Seq.tryItem(i + 1))) shuffledSpeakers
+                   |> Seq.exists (fun x -> x)
+
+        match isAnySpeakerIntroingThemselves, isSpeakerIntoringAfterSpeach with
+        | false, false -> shuffled
+        | _ -> shuffleIntoers shuffledSpeakers
 
     let shuffledSpeakers = speakers
                             |> Seq.mapFold randomOrder []
