@@ -51,10 +51,13 @@ let shuffle speakers =
         | false, false -> shuffledIntoers
         | _ -> shuffleIntoers shuffledSpeakers
 
-    let shuffledSpeakers = speakers
-                            |> Seq.mapFold randomOrder []
-                            |> fst
-                            |> Seq.sortBy (fun s -> s.Order)
+    let shuffle speakers =
+        speakers
+        |> Seq.mapFold randomOrder []
+        |> fst
+        |> Seq.sortBy (fun s -> s.Order)
+
+    let shuffledSpeakers = shuffle speakers
 
     let introducers = shuffleIntoers shuffledSpeakers
 
