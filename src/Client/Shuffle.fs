@@ -22,13 +22,14 @@ let shuffle speakers =
         { speaker with Order = order}, order::usedIndexes
 
     let rec shuffleIntoers shuffledSpeakers =
-        let shuffled = shuffledSpeakers
-                        |> Seq.mapFold randomOrder []
-                        |> fst
+        let shuffledIntoers = shuffledSpeakers
+                              |> Seq.mapFold randomOrder []
+                              |> fst
+                              |> Seq.sortBy (fun i -> i.Order)
 
         let isAnySpeakerIntroingThemselves =
-            shuffled
-            |> Seq.exists2 (fun introer speaker ->
+            shuffledIntoers
+            |> Seq.exists2 (fun speaker introer ->
                                 (introer.Name = speaker.Name) &&
                                  introer.Order = speaker.Order) shuffledSpeakers
 
@@ -38,16 +39,16 @@ let shuffle speakers =
                 | Some introer -> speaker.Name = introer.Name
                 | None -> false
 
-            let length = shuffled |> Seq.length
+            let length = shuffledIntoers |> Seq.length
             match length with
             | l when l <= 3 -> false
-            | _ -> shuffled
+            | _ -> shuffledIntoers
                    |> Seq.mapi2 (fun i speaker _ ->
-                                        isIntroing speaker (shuffled |> Seq.tryItem(i + 1))) shuffledSpeakers
+                                        isIntroing speaker (shuffledIntoers |> Seq.tryItem(i + 1))) shuffledSpeakers
                    |> Seq.exists (fun x -> x)
 
         match isAnySpeakerIntroingThemselves, isSpeakerIntoringAfterSpeach with
-        | false, false -> shuffled
+        | false, false -> shuffledIntoers
         | _ -> shuffleIntoers shuffledSpeakers
 
     let shuffledSpeakers = speakers
@@ -56,6 +57,5 @@ let shuffle speakers =
                             |> Seq.sortBy (fun s -> s.Order)
 
     let introducers = shuffleIntoers shuffledSpeakers
-                      |> Seq.sortBy (fun i -> i.Order)
 
     shuffledSpeakers, introducers
