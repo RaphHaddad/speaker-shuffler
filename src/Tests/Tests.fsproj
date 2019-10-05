@@ -9,7 +9,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ShuffleTests.fs" />
+    <Compile Include="ShuffleRulesTests.fs" />
+    <Compile Include="AcceptanceTests.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
