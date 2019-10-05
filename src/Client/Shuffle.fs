@@ -41,7 +41,7 @@ let shuffle speakers =
 
             let length = shuffledIntoers |> Seq.length
             match length with
-            | l when l <= 3 -> false
+            | l when l <= 2 -> false
             | _ -> shuffledIntoers
                    |> Seq.mapi2 (fun i speaker _ ->
                                         isIntroing speaker (shuffledIntoers |> Seq.tryItem(i + 1))) shuffledSpeakers

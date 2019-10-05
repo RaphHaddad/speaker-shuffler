@@ -6,7 +6,7 @@ open Shuffle;
 
 [<Tests>]
 let ShuffleRules =
-  let testFx = 100000000
+  let testFx = 1000000000
 
   testList "ShuffleRules" [
       testCase "speakerIntroers shouldn't introduce themselves" <| fun _ ->
