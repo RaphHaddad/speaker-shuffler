@@ -8,6 +8,11 @@ open Views
 
 open Types
 open Shuffle
+open Fable.Core
+open Fable.Core.JsInterop
+
+[<ImportDefault("bootstrap")>]
+let myModuleDefaultExport: obj = jsNative
 
 let init () =
     { Speakers = Seq.empty<Speaker>; Introducers = Seq.empty<Speaker> },
