@@ -9,38 +9,38 @@ let ShuffleRules =
   let testFx = 100000000
 
   testList "ShuffleRules" [
-      testCase "speakers shouldn't introduce themselves" <| fun _ ->
+      testCase "speakerIntroers shouldn't introduce themselves" <| fun _ ->
             let test =
               let people = [{ Name = "Raph"; Order = 0 }
                             { Name = "Dave"; Order = 0 }
                             { Name = "Jane"; Order = 0 }
                             { Name = "Alex"; Order = 0 }]
 
-              let speakers, introducers = shuffle people
+              let speakersIntroers = shuffle people
 
-              speakers
+              speakersIntroers.Speakers
               |> Seq.iter2 (fun speaker introer ->
-                                (Expect.notEqual speaker.Name introer.Name "a speaker shouldn't introduce themselves")) introducers
+                                (Expect.notEqual speaker.Name introer.Name "a speaker shouldn't introduce themselves")) speakersIntroers.Introducers
 
             [testFx]
             |> Seq.iter (fun _ -> test)
 
-      testCase "speakers shouldn't introduce after speaking" <| fun _ ->
+      testCase "speakerIntroers shouldn't introduce after speaking" <| fun _ ->
             let test =
                 let people = [{ Name = "Raph"; Order = 0 }
                               { Name = "Dave"; Order = 0 }
                               { Name = "Jane"; Order = 0 }
                               { Name = "Alex"; Order = 0 }]
 
-                let speakers, introducers = shuffle people
+                let speakersIntroers = shuffle people
 
-                speakers
+                speakersIntroers.Speakers
                 |> Seq.iteri2 (fun i _ speaker ->
-                                  let introer = introducers |> Seq.tryItem(i + 1)
+                                  let introer = speakersIntroers.Introducers |> Seq.tryItem(i + 1)
                                   match introer with
                                   | Some (introer) ->
                                                 Expect.notEqual speaker.Name introer.Name "Shouldn't introduce after speaking"
-                                  | None -> ()) introducers
+                                  | None -> ()) speakersIntroers.Introducers
 
             [testFx]
             |> Seq.iter (fun _ -> test)
@@ -63,14 +63,14 @@ let AcceptanceTests =
                                 { Name = "Jane"; Order = 0 }
                                 { Name = "Alex"; Order = 0 }]
 
-                  let speakers, _ = shuffle people
+                  let speakerIntroers = (shuffle people).Speakers
 
                   let areEqual = people
                                         |> Seq.compareWith (fun x y ->
                                                                 if x.Name = y.Name then
                                                                     0
                                                                 else
-                                                                    1 ) speakers
+                                                                    1 ) speakerIntroers
                                         |> isEqual
 
                   Expect.isFalse areEqual "shouldn't be the same order"
@@ -90,16 +90,16 @@ let AcceptanceTests =
                             { Name = "Jane"; Order = 0 }
                             { Name = "Alex"; Order = 0 }]
 
-              let areOrdersUnique speakers =
-                              speakers
+              let areOrdersUnique speakerIntroers =
+                              speakerIntroers
                               |> Seq.distinctBy (fun p -> p.Order)
                               |> Seq.length
                               |> (fun distinctLength -> distinctLength = people.Length)
 
-              let speakers, shuffledIntroer = shuffle people
+              let speakersIntroers = shuffle people
 
-              let speakerOrderUnique = areOrdersUnique speakers
-              let introerOrderUnique = areOrdersUnique shuffledIntroer
+              let speakerOrderUnique = areOrdersUnique speakersIntroers.Speakers
+              let introerOrderUnique = areOrdersUnique speakersIntroers.Introducers
 
               Expect.isTrue (speakerOrderUnique) "speaker orders should be unique"
               Expect.isTrue (introerOrderUnique) "introducer orders should be unique"
@@ -109,25 +109,25 @@ let AcceptanceTests =
 
     testCase "three people" <| fun _ ->
         let test =
-            let speakers, _ =
+            let speakerIntroers =
                 [{ Name = "Raph"; Order = 0 }
                  { Name = "Dave"; Order = 0 }
                  { Name = "Jane"; Order = 0 }
                 ]
                 |> shuffle
-            Expect.isNotNull speakers "should have shuffled"
+            Expect.isNotNull speakerIntroers.Speakers "should have shuffled"
 
         [testFx]
         |> Seq.iter (fun _ -> test)
 
     testCase "two people" <| fun _ ->
         let test =
-            let speakers, _ =
+            let speakerIntroers =
                 [{ Name = "Raph"; Order = 0 }
                  { Name = "Dave"; Order = 0 }
                 ]
                 |> shuffle
-            Expect.isNotNull speakers "should have shuffled 2 people"
+            Expect.isNotNull speakerIntroers.Speakers "should have shuffled 2 people"
 
         [testFx]
         |> Seq.iter (fun _ -> test)

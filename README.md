@@ -20,6 +20,11 @@ To concurrently run the server and the client components in watch mode use the f
 fake build -t Run
 ```
 
+## Run tests
+
+```bash
+dotnet run --project .\src\Tests\
+```
 
 ## SAFE Stack Documentation
 
