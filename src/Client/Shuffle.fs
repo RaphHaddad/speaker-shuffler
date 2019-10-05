@@ -61,4 +61,5 @@ let shuffle speakers =
 
     let introducers = shuffleIntoers shuffledSpeakers
 
-    shuffledSpeakers, introducers
+    { Speakers = shuffledSpeakers
+      Introducers = introducers }

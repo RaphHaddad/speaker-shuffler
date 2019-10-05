@@ -104,7 +104,7 @@ let AcceptanceTests =
               Expect.isTrue (speakerOrderUnique) "speaker orders should be unique"
               Expect.isTrue (introerOrderUnique) "introducer orders should be unique"
 
-          [0..10000000]
+          [testFx]
             |> Seq.iter (fun _ -> test)
 
     testCase "three people" <| fun _ ->

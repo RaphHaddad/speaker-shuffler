@@ -7,8 +7,9 @@ open Elmish.React
 
 open EventMessages
 open Fulma
+open Types
 
-let initialView model dispatch =
+let initialView (model:SpeakersIntroducers) (dispatch:Dispatch<Msg>) =
     div [] [
         form [] [
             h1 [] [ str "SpeekUp speaker shuffler" ]
@@ -33,5 +34,12 @@ let initialView model dispatch =
                     ]
                 ]
             ]
+            tbody []
+                 (
+                     model.Speakers
+                     |> Seq.map2 (fun introer speaker -> tr [][
+                            td [] [ str speaker.Name  ]
+                            td [] [ str introer.Name  ]]) model.Introducers
+                )
         ]
     ]

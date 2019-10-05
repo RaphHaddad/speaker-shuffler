@@ -9,8 +9,8 @@
     <Compile Include="../Shared/Shared.fs" />
     <Compile Include="Version.fs" />
     <Compile Include="EventMessages.fs" />
-    <Compile Include="Views.fs" />
     <Compile Include="Types.fs" />
+    <Compile Include="Views.fs" />
     <Compile Include="Shuffle.fs" />
     <Compile Include="Client.fs" />
   </ItemGroup>
