@@ -29,8 +29,7 @@ let ShuffleRules =
             let test =
                 let people = [{ Name = "Raph"; Order = 0 }
                               { Name = "Dave"; Order = 0 }
-                              { Name = "Jane"; Order = 0 }
-                              { Name = "Alex"; Order = 0 }]
+                              { Name = "Jane"; Order = 0 }]
 
                 let speakersIntroers = shuffle people
 
