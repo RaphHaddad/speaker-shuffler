@@ -33,6 +33,6 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: "Publish artifacts to release"
   inputs:
-    PathtoPublish: './src/Client/deploy/*'
+    PathtoPublish: './src/Client/deploy/'
     ArtifactName: 'drop'
     publishLocation: 'Container'
