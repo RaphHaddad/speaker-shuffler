@@ -9,6 +9,27 @@ open EventMessages
 open Fulma
 open Types
 
+let tableFor speakersIntroers =
+    table [Class "table is-fullwidth"] [
+        thead [] [
+            tr [] [
+                td [] [
+                    str "Speaker"
+                ]
+                td [] [
+                    str "Introducer"
+                ]
+            ]
+        ]
+        tbody []
+             (
+                 speakersIntroers.Speakers
+                 |> Seq.map2 (fun introer speaker -> tr [][
+                        td [] [ str speaker.Name  ]
+                        td [] [ str introer.Name  ]]) speakersIntroers.Introducers
+            )
+    ]
+
 let initialView (model:SpeakersIntroducers) (dispatch:Dispatch<Msg>) =
     div [] [
         form [] [
@@ -26,24 +47,5 @@ let initialView (model:SpeakersIntroducers) (dispatch:Dispatch<Msg>) =
         ]
         (match model.ErrorMessage with
         | Some message -> div [Class "has-text-danger"] [str message]
-        | None ->  div [] [])
-        table [Class "table is-fullwidth"] [
-            thead [] [
-                tr [] [
-                    td [] [
-                        str "Speaker"
-                    ]
-                    td [] [
-                        str "Introducer"
-                    ]
-                ]
-            ]
-            tbody []
-                 (
-                     model.Speakers
-                     |> Seq.map2 (fun introer speaker -> tr [][
-                            td [] [ str speaker.Name  ]
-                            td [] [ str introer.Name  ]]) model.Introducers
-                )
-        ]
+        | None -> tableFor model)
     ]

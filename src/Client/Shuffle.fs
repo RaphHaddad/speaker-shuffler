@@ -1,16 +1,28 @@
 module Shuffle
 
 open Types
+open System
 
 let shuffle speakers =
-    let valid speakers =
-        let lengthDistinct = speakers
+    let validate speakers =
+        let strippedSpeakers = speakers
+                               |> Seq.filter (fun s -> s.Name
+                                                       |> String.IsNullOrWhiteSpace
+                                                       |> not)
+
+        let lengthDistinct = strippedSpeakers
                              |> Seq.distinctBy (fun s -> s.Name.ToUpperInvariant())
                              |> Seq.length
-        let length = speakers
+        let length = strippedSpeakers
                     |> Seq.length
 
-        length = lengthDistinct
+        let noDuplicates = length = lengthDistinct
+
+        match noDuplicates, lengthDistinct with
+        | false, 1 -> Some "More than one speaker required with different names"
+        | true, 1 -> Some "More than one speaker required"
+        | false, _ -> Some "Speakers must have different names"
+        | _,_ -> None
 
     let randomOrder usedIndexes speaker =
         let randomNumber fromThisList =
@@ -23,9 +35,9 @@ let shuffle speakers =
 
         let lastIndex = (speakers |> Seq.length) - 1
         let order = [0..lastIndex]
-                    |> Seq.filter (fun i ->
-                                        not (usedIndexes
-                                                |> Seq.contains(i)))
+                    |> Seq.filter (fun i -> usedIndexes
+                                            |> Seq.contains i
+                                            |> not)
                     |> randomNumber
 
         { speaker with Order = order}, order::usedIndexes
@@ -62,13 +74,16 @@ let shuffle speakers =
 
     let shuffle speakers =
         speakers
+        |> Seq.filter (fun s -> s.Name
+                                |> String.IsNullOrWhiteSpace
+                                |> not)
         |> Seq.mapFold randomOrder []
         |> fst
         |> Seq.sortBy (fun s -> s.Order)
 
-    match (valid speakers) with
-    | false -> Error ("Can't have duplicate names")
-    | true ->
+    match (validate speakers) with
+    | Some error -> Error error
+    | None ->
             let shuffledSpeakers = shuffle speakers
             let introducers = shuffleIntoers shuffledSpeakers
 
