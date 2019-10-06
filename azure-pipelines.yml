@@ -10,6 +10,12 @@ pool:
   vmImage: 'windows-latest'
 
 steps:
+- task: DotNetCoreCLI@2
+  displayName: "Test"
+  inputs:
+    command: 'run'
+    projects: './src/Tests/Tests.fsproj'
+
 - task: CmdLine@2
   displayName: "Build Speaker Shuffler"
   inputs:
