@@ -1,6 +1,7 @@
 source https://www.nuget.org/api/v2
 
 nuget Expecto
+nuget Expecto.TestResults
 nuget FSharp.Core
 group Server
     source https://api.nuget.org/v3/index.json
