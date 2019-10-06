@@ -8,27 +8,33 @@ open Views
 
 open Types
 open Shuffle
-open Fable.Core
-open Fable.Core.JsInterop
-
-[<ImportDefault("bootstrap")>]
-let myModuleDefaultExport: obj = jsNative
 
 let init () =
-    { Speakers = Seq.empty<Speaker>; Introducers = Seq.empty<Speaker> },
+    { Speakers = Seq.empty<Speaker>
+      Introducers = Seq.empty<Speaker>
+      ErrorMessage = None},
     Cmd.ofMsg Stop
 
 let update msg (currentModel:SpeakersIntroducers) =
     match msg with
     | ShuffleSpeakers ->
-                let shuffled = shuffle currentModel.Speakers
-                (shuffled), Cmd.none
+                let hasShuffled = shuffle currentModel.Speakers
+                match hasShuffled with
+                | Shuffled speakersIntroers -> ({ Speakers = speakersIntroers.Speakers
+                                                  Introducers = speakersIntroers.Introducers
+                                                  ErrorMessage = None}), Cmd.none
+                | Error message -> ({Speakers = currentModel.Speakers
+                                     Introducers = []
+                                     ErrorMessage = Some message}), Cmd.none
     | AddSpeakers speakerNames ->
                 let speakers = speakerNames.Split('\n')
                                 |> Seq.map (fun n -> { Name = n; Order = 0 })
-                { Speakers = speakers; Introducers = [] }
-                ,Cmd.none
-    | _ -> { Speakers = []; Introducers = [] }, Cmd.none
+                {Speakers = speakers
+                 Introducers = []
+                 ErrorMessage = None}, Cmd.none
+    | _ -> {Speakers = currentModel.Speakers
+            Introducers = []
+            ErrorMessage = None}, Cmd.none
 
 #if DEBUG
 open Elmish.Debug

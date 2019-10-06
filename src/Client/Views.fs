@@ -24,6 +24,9 @@ let initialView (model:SpeakersIntroducers) (dispatch:Dispatch<Msg>) =
                 Button.OnClick (fun _ -> dispatch ShuffleSpeakers)
              ] [str "Shuffle Speakers"]
         ]
+        (match model.ErrorMessage with
+        | Some message -> div [Class "has-text-danger"] [str message]
+        | None ->  div [] [])
         table [Class "table is-fullwidth"] [
             thead [] [
                 tr [] [

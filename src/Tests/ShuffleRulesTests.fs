@@ -2,7 +2,7 @@ module ShuffleRulesTests
 
 open Expecto
 open Types
-open Shuffle;
+open Shuffle
 
 [<Tests>]
 let Tests =
@@ -17,10 +17,12 @@ let Tests =
                             { Name = "Alex"; Order = 0 }]
 
               let speakersIntroers = shuffle people
-
-              speakersIntroers.Speakers
-              |> Seq.iter2 (fun speaker introer ->
-                                (Expect.notEqual speaker.Name introer.Name "a speaker shouldn't introduce themselves")) speakersIntroers.Introducers
+              match speakersIntroers with
+              | Shuffled speakersIntroers ->
+                  speakersIntroers.Speakers
+                  |> Seq.iter2 (fun speaker introer ->
+                                    (Expect.notEqual speaker.Name introer.Name "a speaker shouldn't introduce themselves")) speakersIntroers.Introducers
+              | Error(_) -> Expect.isTrue false "Shuffling didn't work"
 
             [testFx]
             |> Seq.iter (fun _ -> test)
@@ -33,13 +35,16 @@ let Tests =
 
                 let speakersIntroers = shuffle people
 
-                speakersIntroers.Speakers
-                |> Seq.iteri2 (fun i _ speaker ->
-                                  let introer = speakersIntroers.Introducers |> Seq.tryItem(i + 1)
-                                  match introer with
-                                  | Some (introer) ->
-                                                Expect.notEqual speaker.Name introer.Name "Shouldn't introduce after speaking"
-                                  | None -> ()) speakersIntroers.Introducers
+                match speakersIntroers with
+                | Shuffled (speakersIntroers) ->
+                    speakersIntroers.Speakers
+                    |> Seq.iteri2 (fun i _ speaker ->
+                                      let introer = speakersIntroers.Introducers |> Seq.tryItem(i + 1)
+                                      match introer with
+                                      | Some (introer) ->
+                                                    Expect.notEqual speaker.Name introer.Name "Shouldn't introduce after speaking"
+                                      | None -> ()) speakersIntroers.Introducers
+                | Error(_) -> Expect.isTrue false "Shuffling didn't work"
 
             [testFx]
             |> Seq.iter (fun _ -> test)

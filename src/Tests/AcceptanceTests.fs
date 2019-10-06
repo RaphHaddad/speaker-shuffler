@@ -21,17 +21,20 @@ let Tests =
                                 { Name = "Jane"; Order = 0 }
                                 { Name = "Alex"; Order = 0 }]
 
-                  let speakerIntroers = (shuffle people).Speakers
+                  let speakerIntroers = shuffle people
 
-                  let areEqual = people
-                                        |> Seq.compareWith (fun x y ->
-                                                                if x.Name = y.Name then
-                                                                    0
-                                                                else
-                                                                    1 ) speakerIntroers
-                                        |> isEqual
+                  match speakerIntroers with
+                  | Shuffled speakerIntroers ->
+                      let areEqual = people
+                                            |> Seq.compareWith (fun x y ->
+                                                                    if x.Name = y.Name then
+                                                                        0
+                                                                    else
+                                                                        1 ) speakerIntroers.Speakers
+                                            |> isEqual
+                      Expect.isFalse areEqual "shouldn't be the same order"
+                  | Error _ -> Expect.isTrue false "didn't shuffle"
 
-                  Expect.isFalse areEqual "shouldn't be the same order"
 
             [testFx]
             |> Seq.iter (fun _ -> test)
@@ -56,11 +59,14 @@ let Tests =
 
               let speakersIntroers = shuffle people
 
-              let speakerOrderUnique = areOrdersUnique speakersIntroers.Speakers
-              let introerOrderUnique = areOrdersUnique speakersIntroers.Introducers
+              match speakersIntroers with
+              | Shuffled speakersIntroers ->
+                  let speakerOrderUnique = areOrdersUnique speakersIntroers.Speakers
+                  let introerOrderUnique = areOrdersUnique speakersIntroers.Introducers
 
-              Expect.isTrue (speakerOrderUnique) "speaker orders should be unique"
-              Expect.isTrue (introerOrderUnique) "introducer orders should be unique"
+                  Expect.isTrue (speakerOrderUnique) "speaker orders should be unique"
+                  Expect.isTrue (introerOrderUnique) "introducer orders should be unique"
+              | Error _ -> Expect.isTrue false "should've shuffled"
 
           [testFx]
             |> Seq.iter (fun _ -> test)
@@ -73,7 +79,11 @@ let Tests =
                  { Name = "Jane"; Order = 0 }
                 ]
                 |> shuffle
-            Expect.isNotNull speakerIntroers.Speakers "should have shuffled"
+
+            match speakerIntroers with
+            | Shuffled speakerIntroers ->
+                Expect.isNotNull speakerIntroers.Speakers "should have shuffled"
+            | Error _ -> Expect.isTrue false "should've shuffled"
 
         [testFx]
         |> Seq.iter (fun _ -> test)
@@ -85,7 +95,11 @@ let Tests =
                  { Name = "Dave"; Order = 0 }
                 ]
                 |> shuffle
-            Expect.isNotNull speakerIntroers.Speakers "should have shuffled 2 people"
+
+            match speakerIntroers with
+            | Shuffled speakerIntroers ->
+                Expect.isNotNull speakerIntroers.Speakers "should have shuffled 2 people"
+            | Error _ -> Expect.isTrue false "should've shuffled"
 
         [testFx]
         |> Seq.iter (fun _ -> test)

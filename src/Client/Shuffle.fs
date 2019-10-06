@@ -3,6 +3,15 @@ module Shuffle
 open Types
 
 let shuffle speakers =
+    let valid speakers =
+        let lengthDistinct = speakers
+                             |> Seq.distinctBy (fun s -> s.Name.ToUpperInvariant())
+                             |> Seq.length
+        let length = speakers
+                    |> Seq.length
+
+        length = lengthDistinct
+
     let randomOrder usedIndexes speaker =
         let randomNumber fromThisList =
             let rand = System.Random()
@@ -57,9 +66,13 @@ let shuffle speakers =
         |> fst
         |> Seq.sortBy (fun s -> s.Order)
 
-    let shuffledSpeakers = shuffle speakers
+    match (valid speakers) with
+    | false -> Error ("Can't have duplicate names")
+    | true ->
+            let shuffledSpeakers = shuffle speakers
+            let introducers = shuffleIntoers shuffledSpeakers
 
-    let introducers = shuffleIntoers shuffledSpeakers
-
-    { Speakers = shuffledSpeakers
-      Introducers = introducers }
+            Shuffled ({Speakers = shuffledSpeakers
+                       Introducers = introducers
+                       ErrorMessage = None
+                       })
