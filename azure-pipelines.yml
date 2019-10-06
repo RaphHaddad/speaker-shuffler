@@ -12,5 +12,5 @@ pool:
 steps:
 - task: CmdLine@2
   inputs:
-    script: 'fake build --target build'
+    script: 'dotnet tool install fake-cli -g; fake build --target build'
     failOnStderr: true
