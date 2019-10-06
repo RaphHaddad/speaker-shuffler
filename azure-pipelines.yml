@@ -12,5 +12,5 @@ pool:
 steps:
 - task: CmdLine@2
   inputs:
-    script: './build.sh'
+    script: 'fake build --target build'
     failOnStderr: true
