@@ -29,3 +29,10 @@ steps:
       dotnet tool install fake-cli -g
       fake build --target build
     failOnStderr: true
+
+- task: PublishBuildArtifacts@1
+  displayName: "Publish artifacts to release"
+  inputs:
+    PathtoPublish: './src/Client/deploy/*'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
