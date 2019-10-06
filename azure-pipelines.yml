@@ -16,6 +16,12 @@ steps:
     command: 'run'
     projects: './src/Tests/Tests.fsproj'
 
+- task: PublishTestResults@2
+  displayName: "Publish Test Results"
+  inputs:
+    testResultsFormat: 'NUnit'
+    testResultsFiles: '**/TestResults*.xml'
+
 - task: CmdLine@2
   displayName: "Build Speaker Shuffler"
   inputs:
