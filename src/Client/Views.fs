@@ -3,8 +3,7 @@ module Views
 open Fable.React
 open Fable.React.Props
 open Elmish
-open Elmish.React
-
+open System
 open EventMessages
 open Fulma
 open Types
@@ -30,13 +29,19 @@ let tableFor speakersIntroers =
             )
     ]
 
+let shufflerFooter =
+    footer [Class "footer"] [ str "©"
+                              str (DateTime.Now.Year |> string)
+                              str "| A "; a [ Href  "https://raph.ws/"; Target "_blank"] [str "Raphael Haddad"]; str " project |"
+                              a [Href "https://github.com/RaphHaddad/speaker-shuffler"; Target "_blank"] [str "Source"] ]
+
 let initialView (model:SpeakersIntroducers) (dispatch:Dispatch<Msg>) =
     div [] [
         form [] [
-            h1 [Class "subtitle is-1"] [ str "SpeekUp speaker shuffler" ]
-            h2 [Class "subtitle is-2"] [str "Enter Speakers Seperated by a new line"]
+            h1 [Class "subtitle is-1"] [ str "SpeekUp shuffler" ]
             textarea [
                 Class "textarea"
+                Placeholder "Enter speakers seperated by a new line"
                 OnChange (fun ev -> ev.Value
                                     |> AddSpeakers
                                     |> dispatch)
@@ -48,4 +53,5 @@ let initialView (model:SpeakersIntroducers) (dispatch:Dispatch<Msg>) =
         (match model.ErrorMessage with
         | Some message -> div [Class "has-text-danger"] [str message]
         | None -> tableFor model)
+        shufflerFooter
     ]
