@@ -39,6 +39,11 @@ let initialView (model:SpeakersIntroducers) (dispatch:Dispatch<Msg>) =
     div [] [
         form [] [
             h1 [Class "subtitle is-1"] [ str "SpeekUp shuffler" ]
+            p [] [str "Rules:"]
+            ul [] [
+                li [] [str "Speakers can't introduce themselves"]
+                li [] [str "Speakers can't introduce after speaking"]
+            ]
             textarea [
                 Class "textarea"
                 Placeholder "Enter speakers seperated by a new line"
@@ -46,8 +51,10 @@ let initialView (model:SpeakersIntroducers) (dispatch:Dispatch<Msg>) =
                                     |> AddSpeakers
                                     |> dispatch)
             ] []
-            Button.span [
-                Button.OnClick (fun _ -> dispatch ShuffleSpeakers)
+            button [
+                Class "button is-primary"
+                OnClick (fun e -> dispatch ShuffleSpeakers
+                                  e.preventDefault())
              ] [str "Shuffle Speakers"]
         ]
         (match model.ErrorMessage, model.Introducers |> Seq.length with
