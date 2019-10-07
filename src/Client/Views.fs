@@ -50,8 +50,9 @@ let initialView (model:SpeakersIntroducers) (dispatch:Dispatch<Msg>) =
                 Button.OnClick (fun _ -> dispatch ShuffleSpeakers)
              ] [str "Shuffle Speakers"]
         ]
-        (match model.ErrorMessage with
-        | Some message -> div [Class "has-text-danger"] [str message]
-        | None -> tableFor model)
+        (match model.ErrorMessage, model.Introducers |> Seq.length with
+        | Some message, _ -> div [Class "has-text-danger"] [str message]
+        | _, 0 -> div [] []
+        | None, x when x > 0 -> tableFor model)
         shufflerFooter
     ]
