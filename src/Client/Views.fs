@@ -35,32 +35,40 @@ let shufflerFooter =
                               str "| A "; a [ Href  "https://raph.ws/"; Target "_blank"] [str "Raphael Haddad"]; str " project |"
                               a [Href "https://github.com/RaphHaddad/speaker-shuffler"; Target "_blank"] [str "Source"] ]
 
+let description =
+    div [][
+        h1 [Class "subtitle is-1"] [ str "SpeekUp shuffler" ]
+        img [Alt "SpeekUp logo - SpeekUp is an internal Telstra Purple program that helps people get better at public speaking"
+             Class "speekup-logo"
+             Src "SpeekUpLogo.png"
+             ]
+        p [] [str "This is a speaker shuffling application designed for speaking courses. Specifically,
+the speaking course called 'SpeekUp'."]
+        p [] [
+            str "SpeekUp is a public speaking course created by "
+            a [Href "https://twitter.com/David_Cook";
+            Target "_blank"] [
+                str "David Cook. "
+            ]
+            str "It is run internally at ";
+            a [Href "https://www.telstra.com.au/business-enterprise/services/telstra-purple"
+               Target "_blank"] [
+                   str "Telstra Purple "
+               ]
+            str "with the purpose of helping people become better public speakers."
+        ]
+        br []
+        p [] [str "Shuffling Rules:"]
+        ul [] [
+            li [] [str "Speakers can't introduce themselves"]
+            li [] [str "Speakers can't introduce after speaking"]
+        ]
+    ]
+
 let initialView (model:SpeakersIntroducers) (dispatch:Dispatch<Msg>) =
     div [] [
+        description
         form [] [
-            h1 [Class "subtitle is-1"] [ str "SpeekUp shuffler" ]
-            img [Alt "SpeekUp logo - SpeekUp is an internal Telstra Purple program that helps people get better at public speaking"
-                 Class "speekup-logo"
-                 Src "SpeekUpLogo.png"
-                 ]
-            p [] [
-                str "SpeekUp is a public speaking program created by "
-                a [Href "https://twitter.com/David_Cook";
-                Target "_blank"] [
-                    str "David Cook. "
-                ]
-                str "It is run internally at ";
-                a [Href "https://www.telstra.com.au/business-enterprise/services/telstra-purple"
-                   Target "_blank"] [
-                       str "Telstra Purple "
-                   ]
-                str "with the purpose of helping people become better public speakers."
-            ]
-            p [] [str "Shuffling Rules:"]
-            ul [] [
-                li [] [str "Speakers can't introduce themselves"]
-                li [] [str "Speakers can't introduce after speaking"]
-            ]
             textarea [
                 Class "textarea"
                 Placeholder "Enter speakers seperated by a new line"
