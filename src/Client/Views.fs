@@ -39,7 +39,24 @@ let initialView (model:SpeakersIntroducers) (dispatch:Dispatch<Msg>) =
     div [] [
         form [] [
             h1 [Class "subtitle is-1"] [ str "SpeekUp shuffler" ]
-            p [] [str "Rules:"]
+            img [Alt "SpeekUp logo - SpeekUp is an internal Telstra Purple program that helps people get better at public speaking"
+                 Class "speekup-logo"
+                 Src "SpeekUpLogo.png"
+                 ]
+            p [] [
+                str "SpeekUp is a public speaking program created by "
+                a [Href "https://twitter.com/David_Cook";
+                Target "_blank"] [
+                    str "David Cook. "
+                ]
+                str "It is run internally at ";
+                a [Href "https://www.telstra.com.au/business-enterprise/services/telstra-purple"
+                   Target "_blank"] [
+                       str "Telstra Purple "
+                   ]
+                str "with the purpose of helping people become better public speakers."
+            ]
+            p [] [str "Shuffling Rules:"]
             ul [] [
                 li [] [str "Speakers can't introduce themselves"]
                 li [] [str "Speakers can't introduce after speaking"]
