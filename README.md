@@ -22,6 +22,22 @@ You'll need [FAKE](https://fake.build/) to build the solution. Install using
 dotnet tool install fake-cli -g
 ```
 
+## Yarn
+
+You'll need [yarn](https://yarnpkg.com/en/docs/install)
+
+Mac:
+
+```bash
+brew install yarn
+```
+
+Windows:
+
+```bash
+choco install yarn
+```
+
 ## Work with the application
 
 To concurrently run the server and the client components in watch mode use the following command:
